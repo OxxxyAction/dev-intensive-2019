@@ -1,4 +1,12 @@
 # Built application files
+*.apk
+*.ap_
+*.aab
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Built application files
 build/
 
 # Files for the ART/Dalvik VM
@@ -37,4 +45,12 @@ captures/
 google-services.json
 
 # Version control
+vcs.xml# Version control
 vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+lint/reports/
