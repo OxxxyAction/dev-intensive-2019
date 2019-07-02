@@ -1,6 +1,6 @@
-package ru.skillbranch.devintesive.models
+package ru.skillbranch.devintensive.models
 
-import ru.skillbranch.devintesive.utils.Utils
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 class User (
@@ -42,11 +42,15 @@ class User (
     companion object Factory{
         private var lastUserId = -1
 
-        fun makeUser(fullName: String) : User{
+        fun makeUser(fullName: String) : User {
             lastUserId++
 
             val (firstName, lastName) = Utils.parseFullName(fullName)
-            return User(id = "$lastUserId", firstName = firstName, lastName = lastName)
+            return User(
+                id = "$lastUserId",
+                firstName = firstName,
+                lastName = lastName
+            )
         }
     }
 
@@ -66,6 +70,15 @@ class User (
         fun respect ( respect : Int) = apply { this.respect = respect }
         fun lastVisit ( lastVisit : Date) = apply { this.lastVisit = lastVisit }
         fun isOnline ( isOnline : Boolean) = apply { this.isOnline = isOnline }
-        fun build() = User(id, firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
+        fun build() = User(
+            id,
+            firstName,
+            lastName,
+            avatar,
+            rating,
+            respect,
+            lastVisit,
+            isOnline
+        )
     }
 }

@@ -1,4 +1,4 @@
-package ru.skillbranch.devintesive.utils
+package ru.skillbranch.devintensive.utils
 
 object Utils {
     const val emptyStr = ""

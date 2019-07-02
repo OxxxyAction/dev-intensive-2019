@@ -1,4 +1,4 @@
-package ru.skillbranch.devintesive.extensions
+package ru.skillbranch.devintensive.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,14 +13,14 @@ fun Date.format(pattern: String="HH:mm:ss dd.MM.yy"): String{
     return dateFormat.format(this)
 }
 
-fun Date.add(value: Int, units: ExtTimeUnits): Date {
+fun Date.add(value: Int, units: TimeUnits): Date {
     var time = this.time
 
     time += when (units) {
-        ExtTimeUnits.SECOND -> value * SECOND
-        ExtTimeUnits.MINUTE -> value * MINUTE
-        ExtTimeUnits.HOUR -> value * HOUR
-        ExtTimeUnits.DAY -> value * DAY
+        TimeUnits.SECOND -> value * SECOND
+        TimeUnits.MINUTE -> value * MINUTE
+        TimeUnits.HOUR -> value * HOUR
+        TimeUnits.DAY -> value * DAY
     }
     this.time = time
     return this
@@ -37,17 +37,26 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         in 45 .. 75 -> "минуту назад"
         in 75 .. 45 * tempMinute -> {
             val minutes = secondsDiff.getClosestTimeUnitFromSeconds()
-            "$minutes ${getStringForTUnitAndPlural(ExtTimeUnits.MINUTE, minutes.getPluralRule())} назад"
+            "$minutes ${getStringForTUnitAndPlural(
+                TimeUnits.MINUTE,
+                minutes.getPluralRule()
+            )} назад"
         }
         in 45 * tempMinute .. 75 * tempMinute -> "час назад"
         in 75 * tempMinute .. 22 * tempHour -> {
             val hours = secondsDiff.getClosestTimeUnitFromSeconds()
-            "$hours ${getStringForTUnitAndPlural(ExtTimeUnits.HOUR, hours.getPluralRule())} назад"
+            "$hours ${getStringForTUnitAndPlural(
+                TimeUnits.HOUR,
+                hours.getPluralRule()
+            )} назад"
         }
         in 22 * tempHour .. 26 * tempHour -> "день назад"
         in 26 * tempHour .. 360 * tempDay ->{
             val days = secondsDiff.getClosestTimeUnitFromSeconds()
-            "$days ${getStringForTUnitAndPlural(ExtTimeUnits.DAY, days.getPluralRule())} назад"
+            "$days ${getStringForTUnitAndPlural(
+                TimeUnits.DAY,
+                days.getPluralRule()
+            )} назад"
         }
         in 360 * tempDay .. Long.MAX_VALUE -> "более года назад"
 
@@ -55,17 +64,26 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         in -75 .. -45 -> "через минуту"
         in -45 * tempMinute .. -75 -> {
             val minutes = secondsDiff.getClosestTimeUnitFromSeconds()
-            "через $minutes ${getStringForTUnitAndPlural(ExtTimeUnits.MINUTE, minutes.getPluralRule())}"
+            "через $minutes ${getStringForTUnitAndPlural(
+                TimeUnits.MINUTE,
+                minutes.getPluralRule()
+            )}"
         }
         in -75 * tempMinute .. -45 * tempMinute -> "через час"
         in -22 * tempHour .. -75 * tempMinute -> {
             val hours = secondsDiff.getClosestTimeUnitFromSeconds()
-            "через $hours ${getStringForTUnitAndPlural(ExtTimeUnits.HOUR, hours.getPluralRule())}"
+            "через $hours ${getStringForTUnitAndPlural(
+                TimeUnits.HOUR,
+                hours.getPluralRule()
+            )}"
         }
         in -26 * tempHour .. -22 * tempHour -> "через день"
         in -360 * tempDay .. -26 * tempHour ->{
             val days = secondsDiff.getClosestTimeUnitFromSeconds()
-            "через $days ${getStringForTUnitAndPlural(ExtTimeUnits.DAY, days.getPluralRule())}"
+            "через $days ${getStringForTUnitAndPlural(
+                TimeUnits.DAY,
+                days.getPluralRule()
+            )}"
         }
         else -> "более чем через год"
 
@@ -83,12 +101,12 @@ private fun Long.getClosestTimeUnitFromSeconds(): Long{
     }
 }
 
-private fun getStringForTUnitAndPlural(timeUnit : ExtTimeUnits, rule: PluralRules): String{
+private fun getStringForTUnitAndPlural(timeUnit : TimeUnits, rule: PluralRules): String{
     return timeUnitWithPluralToString.first {
         it.first == timeUnit && it.second == rule }.third
 }
 
-fun Long.getPluralRule(): PluralRules{
+fun Long.getPluralRule(): PluralRules {
     return when {
         this.isPluralRuleOne() -> PluralRules.ONE
         this.isPluralRuleFew() -> PluralRules.FEW
@@ -107,17 +125,35 @@ fun Long.isPluralRuleFew(): Boolean{
 }
 
 private val timeUnitWithPluralToString = listOf(
-    Triple( ExtTimeUnits.MINUTE, PluralRules.ONE,"минуту"),
-    Triple( ExtTimeUnits.MINUTE, PluralRules.FEW,"минуты"),
-    Triple( ExtTimeUnits.MINUTE, PluralRules.OTHER,"минут"),
+    Triple(
+        TimeUnits.MINUTE,
+        PluralRules.ONE,"минуту"),
+    Triple(
+        TimeUnits.MINUTE,
+        PluralRules.FEW,"минуты"),
+    Triple(
+        TimeUnits.MINUTE,
+        PluralRules.OTHER,"минут"),
 
-    Triple( ExtTimeUnits.HOUR, PluralRules.ONE,"час"),
-    Triple( ExtTimeUnits.HOUR, PluralRules.FEW,"часа"),
-    Triple( ExtTimeUnits.HOUR, PluralRules.OTHER,"часов"),
+    Triple(
+        TimeUnits.HOUR,
+        PluralRules.ONE,"час"),
+    Triple(
+        TimeUnits.HOUR,
+        PluralRules.FEW,"часа"),
+    Triple(
+        TimeUnits.HOUR,
+        PluralRules.OTHER,"часов"),
 
-    Triple( ExtTimeUnits.DAY, PluralRules.ONE,"день"),
-    Triple( ExtTimeUnits.DAY, PluralRules.FEW,"дня"),
-    Triple( ExtTimeUnits.DAY, PluralRules.OTHER,"дней")
+    Triple(
+        TimeUnits.DAY,
+        PluralRules.ONE,"день"),
+    Triple(
+        TimeUnits.DAY,
+        PluralRules.FEW,"дня"),
+    Triple(
+        TimeUnits.DAY,
+        PluralRules.OTHER,"дней")
 )
 
 enum class PluralRules{
@@ -126,7 +162,7 @@ enum class PluralRules{
     OTHER
 }
 
-enum class ExtTimeUnits{
+enum class TimeUnits{
     SECOND,
     MINUTE,
     HOUR,

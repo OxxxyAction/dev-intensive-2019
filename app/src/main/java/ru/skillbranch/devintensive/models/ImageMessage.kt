@@ -1,18 +1,18 @@
-package ru.skillbranch.devintesive.models
+package ru.skillbranch.devintensive.models
 
 import java.util.*
 
-class TextMessage(
+class ImageMessage(
     id: String,
     from: User?,
     chat: Chat,
     isIncoming: Boolean = false,
     date: Date = Date(),
-    var text: String?
+    var image: String?
 ) : BaseMessage(id, from, chat, isIncoming, date) {
 
     override fun formatMessage(): String {
         val incomingStringValue = if (isIncoming) "Получил" else "Отрпавил"
-        return "$id ${from?.firstName} $incomingStringValue сообщение"
+        return "$id ${from?.firstName} $incomingStringValue изображение"
     }
 }
