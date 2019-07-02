@@ -3,7 +3,7 @@ package ru.skillbranch.devintensive.models
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
-class User (
+data class User (
     val id : String,
     var firstName : String?,
     var lastName : String?,
@@ -26,6 +26,8 @@ class User (
         println("It`s Alive! ${if(lastName==="Doe") "His name is $firstName $lastName"
         else "And hist name is $firstName $lastName !!!"}")
     }
+
+
 
     fun printMe()=
         println("""
@@ -54,7 +56,8 @@ class User (
         }
     }
 
-    class Builder(var id: String = "0"){
+    class Builder{
+        var id: String
         var firstName : String? = null
         var lastName : String? = null
         var avatar : String? = null
@@ -62,6 +65,11 @@ class User (
         var respect : Int = 0
         var lastVisit : Date? = Date()
         var isOnline : Boolean = false
+
+        init {
+            Factory.lastUserId++
+            id = "${Factory.lastUserId}"
+        }
 
         fun id ( id : String) = apply { this.id = id }
         fun firstName ( firstName : String) = apply { this.firstName = firstName }
