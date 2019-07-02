@@ -54,15 +54,16 @@ class User (
         }
     }
 
-    class Builder(private val id: String){
-        private var firstName : String? = null
-        private var lastName : String? = null
-        private var avatar : String? = null
-        private var rating : Int = 0
-        private var respect : Int = 0
-        private var lastVisit : Date? = Date()
-        private var isOnline : Boolean = false
+    class Builder(var id: String = "0"){
+        var firstName : String? = null
+        var lastName : String? = null
+        var avatar : String? = null
+        var rating : Int = 0
+        var respect : Int = 0
+        var lastVisit : Date? = Date()
+        var isOnline : Boolean = false
 
+        fun id ( id : String) = apply { this.id = id }
         fun firstName ( firstName : String) = apply { this.firstName = firstName }
         fun lastName ( lastName : String) = apply { this.lastName = lastName }
         fun avatar ( avatar : String) = apply { this.avatar = avatar }

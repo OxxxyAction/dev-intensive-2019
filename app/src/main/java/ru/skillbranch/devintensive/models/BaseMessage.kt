@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.models
 
+import java.lang.IllegalStateException
 import java.util.*
 
 abstract class BaseMessage(
@@ -15,17 +16,18 @@ abstract class BaseMessage(
         var lastId = -1
 
         fun makeMessage(fromUser: User?, chat: Chat, date: Date = Date(),
-                        type: MessageType, payload: Any?, isIncoming: Boolean = false): BaseMessage {
+                        type1: String, payload: Any?, isIncoming: Boolean = false): BaseMessage {
             lastId++
-            return when(type){
-                MessageType.IMAGE -> ImageMessage(
+            return when(type1){
+                "image" -> ImageMessage(
                     "$lastId", fromUser, chat,
                     date = date, image = payload as String, isIncoming = isIncoming
                 )
-                MessageType.TEXT -> TextMessage(
+                "text" -> TextMessage(
                     "$lastId", fromUser, chat,
                     date = date, text = payload as String, isIncoming = isIncoming
                 )
+                else -> throw IllegalStateException("unsupported type: $type1" )
             }
         }
     }
