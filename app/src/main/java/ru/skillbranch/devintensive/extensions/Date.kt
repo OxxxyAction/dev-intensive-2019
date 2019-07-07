@@ -166,5 +166,12 @@ enum class TimeUnits{
     SECOND,
     MINUTE,
     HOUR,
-    DAY,
+    DAY;
+
+    fun plural(value: Long): String{
+        return "$value ${getStringForTUnitAndPlural(
+            this,
+            value.getPluralRule()
+        )}"
+    }
 }
