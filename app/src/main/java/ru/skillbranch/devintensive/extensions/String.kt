@@ -1,15 +1,19 @@
 package ru.skillbranch.devintensive.extensions
 
-fun String.truncate(length: Int) : String{
+fun String.truncate(length: Int = 16) : String{
+    var workString = this.removeSpaceAtTheEng().trim()
     var resultString = ""
-    for ((index,char) in this.withIndex()) {
+    for ((index,char) in workString.withIndex()) {
         if(index == length){
+            if(resultString.get(index - 1) == ' '){
+                resultString = resultString.substring(0, index - 1 )
+            }
+            resultString += "..."
             break
         }else{
             resultString += char
         }
     }
-    resultString += "..."
     return resultString
 }
 
@@ -18,6 +22,7 @@ public fun String.stripHtml(): String{
     result = result.removeExtraWhiteSpaces()
     result = result.removeHtmlTags()
     result = result.removeEscapeSequences()
+    result = result.removeExtraWhiteSpaces()
     return result
 }
 
@@ -33,12 +38,27 @@ public fun String.removeExtraWhiteSpaces(): String{
     return result
 }
 
+public fun String.removeSpaceAtTheEng(): String{
+    println("this: $this")
+    var endIndex = this.length
+    for( i in this.length-1 downTo 0){
+        if(this.get(i) == ' '){
+            endIndex--
+        }else{
+            break
+        }
+    }
+    val res = this.substring(0, endIndex )
+    return res
+
+}
+
 
 private fun String.removeEscapeSequences(): String {
     var result = this
     for (s in escapeSeqSet) {
         if(result.contains(s)){
-            result.replace(s, "")
+            result = result.replace(s, "")
         }
     }
     return result
@@ -49,13 +69,13 @@ public fun String.removeHtmlTags(strBeginIndex: Int = 0): String{
     var resultString = this
     var indexOfStartBeginTag =  workString.indexOf("<")
     var indexOfStartEndTag =  workString.indexOf("</")
-    var indexOfStartTag = if( indexOfStartBeginTag > 0 && indexOfStartEndTag > 0)
+    var indexOfStartTag = if( indexOfStartBeginTag >= 0 && indexOfStartEndTag >= 0)
         kotlin.math.min(indexOfStartBeginTag, indexOfStartEndTag)
     else
         kotlin.math.max(indexOfStartBeginTag, indexOfStartEndTag)
 
     var indexOfEndTag = workString.indexOf(">")
-    if(indexOfStartTag > 0 && indexOfEndTag > 0 && indexOfStartTag < indexOfEndTag){
+    if(indexOfStartTag >= 0 && indexOfEndTag >= 0 && indexOfStartTag < indexOfEndTag){
         val localRes = resultString.removeHtmlTagInRange( indexOfStartTag + strBeginIndex, indexOfEndTag+ strBeginIndex)
         val indexDiff = resultString.length - localRes.length
         resultString = localRes
@@ -66,7 +86,7 @@ public fun String.removeHtmlTags(strBeginIndex: Int = 0): String{
     }else if(indexOfEndTag > 0){
         return resultString.removeHtmlTags(indexOfEndTag)
     }else{
-        return this.trimIndent()
+        return this
     }
 
 }
@@ -78,18 +98,20 @@ fun String.removeHtmlTagInRange(startIndex : Int, endIndex: Int) : String {
         tagStr = tagStr.substring(slashIndex+1)
     }
     val tagValue = tagStr.split(" ")[0]
-    return if(htmlTagsSet.contains(tagValue)){
+    return if(htmlTagsSet.contains(tagValue.toLowerCase())){
         this.removeRange(startIndex, endIndex + 1).removeExtraWhiteSpaces()
     }else{
         this
     }
 }
 private val escapeSeqSet = setOf<String>(
+    "\\&amp;",
     "&amp;",
     "&gt;",
     "&quot;",
     "&apos;",
-    "&lt;"
+    "&lt;",
+    "&#39;"
 )
 
 private val htmlTagsSet = setOf<String>(
@@ -170,6 +192,7 @@ private val htmlTagsSet = setOf<String>(
     "option",
     "p",
     "param",
+    "path",
     "pre",
     "progress",
     "q",
@@ -184,6 +207,7 @@ private val htmlTagsSet = setOf<String>(
     "strike",
     "strong",
     "style",
+    "svg",
     "sub",
     "sup",
     "table",
