@@ -120,11 +120,22 @@ fun Long.isPluralRuleOne(): Boolean{
 }
 fun Long.isPluralRuleFew(): Boolean{
     val strLongValue = this.toString()
-    return strLongValue.endsWith("2") || strLongValue.endsWith("3")
-            || strLongValue.endsWith("4")
+    return (strLongValue.endsWith("2") && !strLongValue.endsWith("12"))
+            || (strLongValue.endsWith("3") && !strLongValue.startsWith("13"))
+            || (strLongValue.endsWith("4") && !strLongValue.startsWith("14"))
 }
 
 private val timeUnitWithPluralToString = listOf(
+    Triple(
+        TimeUnits.SECOND,
+        PluralRules.ONE,"секунду"),
+    Triple(
+        TimeUnits.SECOND,
+        PluralRules.FEW,"секунды"),
+    Triple(
+        TimeUnits.SECOND,
+        PluralRules.OTHER,"секунд"),
+
     Triple(
         TimeUnits.MINUTE,
         PluralRules.ONE,"минуту"),
